@@ -39,8 +39,8 @@ spec:
       params:
         - name: gitops-repo-url
           value: $(params.git-url) 
-        - name: image
-          value: "compute"
+        - name: environment
+          value: $(params.promotion-destination) 
       runAfter:
         - clone-repository
       taskRef:
