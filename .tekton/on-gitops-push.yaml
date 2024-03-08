@@ -1,0 +1,34 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: promo-test-on-push 
+  annotations:
+    pipelinesascode.tekton.dev/on-event: "[push]"
+    pipelinesascode.tekton.dev/on-target-branch: "[main]"
+    pipelinesascode.tekton.dev/max-keep-runs: "2"
+    pipelinesascode.tekton.dev/pipeline: ".tekton/do-promotion.yaml"
+    pipelinesascode.tekton.dev/task-0: ".tekton/promote.yaml" 
+spec:
+  params:
+  - name: git-url
+    value: '{{repo_url}}'   
+  - name: revision
+    value: '{{revision}}'
+  - name: promotion-destination
+    value: '{{source_branch}}' 
+  - name: event-type
+    value: '{{event_type}}'   
+  pipelineRef:
+    name: do-promotion 
+  workspaces:
+    - name: git-auth
+      secret:
+        secretName: "{{ git_auth_secret }}"
+    - name: workspace
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+          - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi

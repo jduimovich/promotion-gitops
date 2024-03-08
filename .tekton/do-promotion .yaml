@@ -1,0 +1,59 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  labels:
+    pipelines.openshift.io/runtime: generic
+    pipelines.openshift.io/strategy: docker
+    pipelines.openshift.io/used-by: build-cloud
+  name: do-promotion 
+spec: 
+  params:
+    - description: Gitops Repo Url 
+      name: git-url
+      type: string
+    - default: ""
+      description: Revision of the Source Repository
+      name: revision
+      type: string
+    - description: Stage to promoted dev..stage and prod to promote from stage..prod.
+      name: promotion-destination
+      type: string
+    - description: If push update the deployment, if PR, only run checks.
+      name: event-type
+      type: string 
+  tasks:
+    - name: clone-repository
+      params:
+        - name: url
+          value: $(params.git-url)
+        - name: revision
+          value: $(params.revision)
+      runAfter:
+        - init
+      taskRef:
+        name: git-clone
+      when:
+        - input: $(tasks.init.results.build)
+          operator: in
+          values:
+            - "true"
+      workspaces:
+        - name: output
+          workspace: workspace
+        - name: basic-auth
+          workspace: git-auth
+    - name: promote
+      params:
+        - name: gitops-repo-url
+          value: $(params.git-url) 
+        - name: image
+          value: $(tasks.build-container.results.IMAGE_URL)@$(tasks.build-container.results.IMAGE_DIGEST)
+      runAfter:
+        - clone-repository
+      taskRef:
+        kind: Task
+        name: update-deployment
+  workspaces:
+    - name: workspace
+    - name: git-auth
+      optional: true 
