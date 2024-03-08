@@ -52,7 +52,7 @@ spec:
         - clone-repository
       taskRef:
         kind: Task
-        name: update-deployment
+        name: promote
   workspaces:
     - name: workspace
     - name: git-auth
