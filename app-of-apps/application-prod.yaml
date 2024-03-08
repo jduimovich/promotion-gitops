@@ -8,7 +8,7 @@ spec:
   project: default
   source:
     path: ./components/promo-test/overlays/prod
-    repoURL: https://github.com/jduimovich/promo-test-gitops.git
+    repoURL: https://github.com/jduimovich/promotion-gitops.git
     targetRevision: main
   destination:
     namespace: rhtap-prod

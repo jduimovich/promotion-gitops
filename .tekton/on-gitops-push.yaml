@@ -9,7 +9,6 @@ metadata:
     pipelinesascode.tekton.dev/pipeline: ".tekton/do-promotion.yaml"
     pipelinesascode.tekton.dev/task-0: ".tekton/promote.yaml" 
     pipelinesascode.tekton.dev/task-1: "https://raw.githubusercontent.com/redhat-appstudio/tssc-sample-pipelines/main/pac/tasks/git-clone.yaml"
-
 spec:
   params:
   - name: git-url
