@@ -4,5 +4,4 @@ patchesStrategicMerge:
 - deployment-patch.yaml
 resources:
 - ../../base 
-- gitops-repository.yaml
-- source-repository.yaml
+- gitops-repository.yaml 
