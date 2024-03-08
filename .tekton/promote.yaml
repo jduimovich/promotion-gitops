@@ -52,22 +52,27 @@ spec:
         echo "TODO: configure git credentials to update gitops repository."
         exit 0
       fi
+ 
+      echo "------------------------------------"
+      echo $PARAM_GITOPS_REPO_URL
+      echo $PARAM_ENV
 
-      du -a 
+      ls /workspace
+      
       # https://github.com/user-org/test-component-gitops => test-component
-      gitops_repo_name=$(basename ${PARAM_GITOPS_REPO_URL})
-      component_id=${gitops_repo_name%'-gitops'}
-      deployment_patch_filepath="components/${component_id}/overlays/development/deployment-patch.yaml"
+      # gitops_repo_name=$(basename ${PARAM_GITOPS_REPO_URL})
+      # component_id=${gitops_repo_name%'-gitops'}
+      # deployment_patch_filepath="components/${component_id}/overlays/development/deployment-patch.yaml"
 
-      git config --global user.email "rhtap@noreplay.com"
-      git config --global user.name "gitops-update"
+      # git config --global user.email "rhtap@noreplay.com"
+      # git config --global user.name "gitops-update"
 
-      git clone ${PARAM_GITOPS_REPO_URL}
-      cd ${gitops_repo_name}
+      # git clone ${PARAM_GITOPS_REPO_URL}
+      # cd ${gitops_repo_name}
 
-      sed -i "s| image: .*| image: ${PARAM_IMAGE}|" $deployment_patch_filepath
+      # sed -i "s| image: .*| image: ${PARAM_IMAGE}|" $deployment_patch_filepath
 
-      git add .
-      git commit -m "Update '${component_id}' component image to: ${PARAM_IMAGE}"
-      git remote set-url origin $origin_with_auth
-      git push
+      # git add .
+      # git commit -m "Update '${component_id}' component image to: ${PARAM_IMAGE}"
+      # git remote set-url origin $origin_with_auth
+      # git push
