@@ -30,8 +30,8 @@ spec:
     env:
       - name: PARAM_GITOPS_REPO_URL
         value: $(params.gitops-repo-url)
-      - name: PARAM_IMAGE
-        value: $(params.image)
+      - name: PARAM_ENV
+        value: $(params.environment)
     script: |
       if test -f /gitops-auth-secret/password ; then
         gitops_repo_url=${PARAM_GITOPS_REPO_URL}
