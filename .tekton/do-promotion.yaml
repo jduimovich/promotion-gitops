@@ -27,9 +27,7 @@ spec:
         - name: url
           value: $(params.git-url)
         - name: revision
-          value: $(params.revision)
-      runAfter:
-        - init
+          value: $(params.revision) 
       taskRef:
         name: git-clone
       when:
