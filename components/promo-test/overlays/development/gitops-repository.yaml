@@ -3,4 +3,4 @@ kind: Repository
 metadata:
   name: promo-test-gitops-repository
 spec:
-  url: https://github.com/jduimovich/promotion-gitops.git
+  url: https://github.com/jduimovich/promotion-gitops 
