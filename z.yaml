@@ -15,7 +15,7 @@ spec:
   - name: git-url
     value: https://github.com/jduimovich/promotion-gitops
   - name: revision
-    value: 5b29680aadefa92554e671513886b5b0517ddeb4
+    value: b4c6781020cad33d9163939e11e7ecc7918a5b6f
   - name: promotion-destination
     value: '{{source_branch}}'
   - name: event-type
@@ -42,8 +42,6 @@ spec:
         value: $(params.git-url)
       - name: revision
         value: $(params.revision)
-      runAfter:
-      - init
       taskSpec:
         description: The git-clone Task will clone a repo from the provided url into
           the output Workspace. By default the repo will be cloned into the root of
@@ -311,12 +309,7 @@ spec:
             to use ssh-directory over basic-auth whenever possible and to bind a
             Secret to this Workspace over other volume types.
           name: basic-auth
-          optional: true
-      when:
-      - input: $(tasks.init.results.build)
-        operator: in
-        values:
-        - "true"
+          optional: true 
       workspaces:
       - name: output
         workspace: workspace

@@ -29,12 +29,7 @@ spec:
         - name: revision
           value: $(params.revision) 
       taskRef:
-        name: git-clone
-      when:
-        - input: $(tasks.init.results.build)
-          operator: in
-          values:
-            - "true"
+        name: git-clone 
       workspaces:
         - name: output
           workspace: workspace
