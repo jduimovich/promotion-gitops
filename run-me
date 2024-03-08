@@ -1,0 +1,17 @@
+ 
+ 
+NS=promo-test-development 
+ 
+kubectl get ns $NS &> /dev/null
+ERR=$?
+if [  "$ERR" != "0" ]
+then 
+    echo "Create Project $NS"
+    echo "oc new-project $NS"
+    oc new-project $NS 
+fi 
+oc project  $NS  
+oc apply -f gitops-repository.yaml 
+echo "Running Pipeline " 
+tkn-pac  resolve -f .tekton/on-gitops-push.yaml | oc create -f -
+  
