@@ -102,8 +102,7 @@ spec:
         DST_PATCH="components/${COMPONENT_NAME}/overlays/$DST_OVERLAY/deployment-patch.yaml"
         
         git config --global user.email "rhtap@noreplay.com"
-        git config --global user.name "promotion-automation-handler" 
-
+        git config --global user.name "promotion-automation-handler"  
         #clean repo 
         cd /workspace/output
         gitops_repo_name=$(basename $PARAM_GITOPS_REPO_URL)
