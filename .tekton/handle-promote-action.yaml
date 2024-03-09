@@ -62,6 +62,10 @@ spec:
       echo "Command:"
       echo "$command"
       echo 
+      COMPONENT_NAME=$(grep name: /workspace/output/source/application.yaml | cut -d ':' -f2 | tr -d '[:space:]') 
+      echo "COMPONENT_NAME:"
+      echo "$COMPONENT_NAME"
+      echo 
       cd /workspace/output/source 
       if test -f promotion-action ; then
         ACTION=$(cat promotion-action) 
