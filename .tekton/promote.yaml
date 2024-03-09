@@ -29,8 +29,7 @@ spec:
     image: quay.io/redhat-appstudio/appstudio-utils:d8a93bf5650424a4f20ee065578609792d70af1c
     script: |
       #!/bin/bash 
-      echo "------------------------------------"
-      ls -al
+      echo "------------------------------------"   
       ls -al /workspace
       ls -al /workspace/output 
       ls -al /workspace/output/source
@@ -75,7 +74,7 @@ spec:
       fi
  
       echo "------------------------------------"
-      cd /workspace/output 
+      cd /workspace/output/source
       echo $PARAM_GITOPS_REPO_URL
       echo $PARAM_ENV 
       source  promotion-env 
