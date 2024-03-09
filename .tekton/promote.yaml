@@ -60,6 +60,10 @@ spec:
       ls -al
       ls -al /workspace
       
+      du -a /workspace
+
+      echo "------------------------------------"
+
       # https://github.com/user-org/test-component-gitops => test-component
       # gitops_repo_name=$(basename ${PARAM_GITOPS_REPO_URL})
       # component_id=${gitops_repo_name%'-gitops'}
