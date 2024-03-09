@@ -16,12 +16,26 @@ spec:
       default: gitops-auth-secret
       description: |
         Secret of basic-auth type containing credentials to commit into gitops repository.
+  workspaces:
+  - description: The git repo will be cloned onto the volume backing this Workspace.
+    name: output
   volumes:
     - name: gitops-auth-secret
       secret:
         secretName: $(params.gitops-auth-secret-name)
         optional: true
   steps:
+  - name: extract-app-name
+    image: quay.io/redhat-appstudio/appstudio-utils:d8a93bf5650424a4f20ee065578609792d70af1c
+    script: |
+      #!/bin/bash 
+      echo "------------------------------------"
+      cd /workspace/output 
+      COMPONENT_NAME=$(yq .metadata.name application.yaml)
+      echo $COMPONENT_NAME 
+      echo "------------------------------------"  
+      echo "COMPONENT_NAME=$COMPONENT_NAME" >promotion-env
+      cat promotion-env
   - name: promotion-step
     image: quay.io/redhat-appstudio/task-toolset@sha256:931a9f7886586391ccb38d33fd15a47eb03568f9b19512b0a57a56384fa52a3c
     volumeMounts:
@@ -54,25 +68,23 @@ spec:
       fi
  
       echo "------------------------------------"
-      echo $PARAM_GITOPS_REPO_URL
-      echo $PARAM_ENV
-
-      ls -al
-      ls -al /workspace
-      
-      du -a /workspace
-
-      echo "------------------------------------"
       cd /workspace/output 
-      yq .metadata.name application.yaml
-      echo "------------------------------------"
+      echo $PARAM_GITOPS_REPO_URL
+      echo $PARAM_ENV 
+      source  promotion-env 
+      echo "COMPONENT_NAME=$COMPONENT_NAME"  
 
+      if [ $PARAM_ENV == "promote-dev-stage" ]; then
+        echo "DEV TO STAGE"
+      fi 
+      if [ $PARAM_ENV == "promote-stage-prod" ]; then
+        echo "STAGE TO PROD"
+      fi 
 
       # https://github.com/user-org/test-component-gitops => test-component
-      gitops_repo_name=$(basename ${PARAM_GITOPS_REPO_URL})
+      gitops_repo_name=$(basename ${PARAM_GITOPS_REPO_URL}) 
+      component_id=$COMPONENT_NAME
 
-
-      # component_id=${gitops_repo_name%'-gitops'}
       # deployment_patch_filepath="components/${component_id}/overlays/development/deployment-patch.yaml"
 
       # git config --global user.email "rhtap@noreplay.com"
@@ -87,6 +99,3 @@ spec:
       # git commit -m "Update '${component_id}' component image to: ${PARAM_IMAGE}"
       # git remote set-url origin $origin_with_auth
       # git push
-  workspaces:
-  - description: The git repo will be cloned onto the volume backing this Workspace.
-    name: output
