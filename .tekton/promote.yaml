@@ -63,9 +63,15 @@ spec:
       du -a /workspace
 
       echo "------------------------------------"
+      cd /workspace/output 
+      yq .metadata.name application.yaml
+      echo "------------------------------------"
+
 
       # https://github.com/user-org/test-component-gitops => test-component
-      # gitops_repo_name=$(basename ${PARAM_GITOPS_REPO_URL})
+      gitops_repo_name=$(basename ${PARAM_GITOPS_REPO_URL})
+
+
       # component_id=${gitops_repo_name%'-gitops'}
       # deployment_patch_filepath="components/${component_id}/overlays/development/deployment-patch.yaml"
 
