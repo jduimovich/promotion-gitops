@@ -89,12 +89,10 @@ spec:
  
         SRC_PATCH="components/${COMPONENT_NAME}/overlays/$SRC_OVERLAY$SRC_OVERLAY/deployment-patch.yaml"
         DST_PATCH="components/${COMPONENT_NAME}/overlays/$DST_OVERLAY/deployment-patch.yaml"
-
-        echo "Source and Dest diff before promotion"
-        diff $SRC_PATCH  $DST_PATCH 
-        cp $SRC_PATCH $DST_PATCH 
-        echo "Source and Dest diff after promotion"
-        diff $SRC_PATCH  $DST_PATCH 
+        pwd
+        echo changes 
+        cp $SRC_PATCH $DST_PATCH  
+        git diff 
 
         # git config --global user.email "rhtap@noreplay.com"
         # git config --global user.name "promotion-automation-handler" 
