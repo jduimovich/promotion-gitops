@@ -14,10 +14,7 @@ spec:
     - default: ""
       description: Revision of the Source Repository
       name: revision
-      type: string
-    - description: Stage to promoted dev..stage and prod to promote from stage..prod.
-      name: promotion-destination
-      type: string
+      type: string 
     - description: If push update the deployment, if PR, only run checks.
       name: event-type
       type: string 
@@ -38,9 +35,7 @@ spec:
     - name: handle-promote-action
       params:
         - name: gitops-repo-url
-          value: $(params.git-url) 
-        - name: environment
-          value: $(params.promotion-destination) 
+          value: $(params.git-url)  
       runAfter:
         - clone-repository
       taskRef:

@@ -8,9 +8,6 @@ spec:
     - name: gitops-repo-url
       type: string
       description: URL of gitops repository to update with the newly built image.
-    - name: environment
-      type: string
-      description:  stage - promote from dev, and prod, promote from stage.
     - name: gitops-auth-secret-name
       type: string
       default: gitops-auth-secret
@@ -40,9 +37,7 @@ spec:
         mountPath: /gitops-auth-secret
     env:
       - name: PARAM_GITOPS_REPO_URL
-        value: $(params.gitops-repo-url)
-      - name: PARAM_ENV
-        value: $(params.environment)
+        value: $(params.gitops-repo-url) 
     script: |
       if test -f /gitops-auth-secret/password ; then
         gitops_repo_url=${PARAM_GITOPS_REPO_URL}
