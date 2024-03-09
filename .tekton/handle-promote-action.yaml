@@ -25,18 +25,6 @@ spec:
         secretName: $(params.gitops-auth-secret-name)
         optional: true
   steps:
-  - name: extract-actions 
-    image: quay.io/redhat-appstudio/appstudio-utils:d8a93bf5650424a4f20ee065578609792d70af1c
-    script: |
-      #!/bin/bash   
-      COMPONENT_NAME=$(yq .metadata.name /workspace/output/source/application.yaml) 
-      # be sure not to modify the source repo that was cloned  
-      echo "COMPONENT_NAME=$COMPONENT_NAME" >/workspace/output/handle-promote-action.env
-      
-      COMPONENT_NAME2=$(grep name: /workspace/output/source/application.yaml | cut -d ':' -f2 | tr -d '[:space:]') 
-
-      echo "COMPONENT_NAME2=$COMPONENT_NAME2" >>/workspace/output/handle-promote-action.env
-      cat /workspace/output/handle-promote-action.env
   - name: promotion-step
     image: quay.io/redhat-appstudio/task-toolset@sha256:931a9f7886586391ccb38d33fd15a47eb03568f9b19512b0a57a56384fa52a3c
     volumeMounts:
@@ -77,7 +65,7 @@ spec:
       cd /workspace/output/source 
       if test -f promotion-action ; then
         ACTION=$(cat promotion-action) 
-        source /workspace/output/handle-promote-action.env 
+        COMPONENT_NAME=$(grep name: /workspace/output/source/application.yaml | cut -d ':' -f2 | tr -d '[:space:]') 
         echo "Repo = $PARAM_GITOPS_REPO_URL"
         echo "COMPONENT_NAME=$COMPONENT_NAME"  
         echo "ACTION=$ACTION" 
