@@ -87,7 +87,7 @@ spec:
             ;;
         esac 
  
-        SRC_PATCH="components/${COMPONENT_NAME}/overlays/$SRC_OVERLAY$SRC_OVERLAY/deployment-patch.yaml"
+        SRC_PATCH="components/${COMPONENT_NAME}/overlays/$SRC_OVERLAY/deployment-patch.yaml"
         DST_PATCH="components/${COMPONENT_NAME}/overlays/$DST_OVERLAY/deployment-patch.yaml"
         pwd
         echo changes 
