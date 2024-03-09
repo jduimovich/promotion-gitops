@@ -33,8 +33,9 @@ spec:
       ls -al
       ls -al /workspace
       ls -al /workspace/output 
+      ls -al /workspace/output/source
 
-      cd /workspace/output 
+      cd /workspace/output/source
       ls -al 
 
       COMPONENT_NAME=$(yq .metadata.name application.yaml)
