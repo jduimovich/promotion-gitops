@@ -4,7 +4,7 @@ metadata:
   name: promo-test-on-push 
   annotations:
     pipelinesascode.tekton.dev/on-event: "[push]"
-    pipelinesascode.tekton.dev/on-target-branch: "[promote-dev-stage, promote-stage-prod]" 
+    pipelinesascode.tekton.dev/on-target-branch: "[main, promote-dev-stage, promote-stage-prod]" 
     pipelinesascode.tekton.dev/pipeline: ".tekton/do-promotion.yaml"
     pipelinesascode.tekton.dev/task-0: ".tekton/promote.yaml" 
     pipelinesascode.tekton.dev/task-1: "https://raw.githubusercontent.com/redhat-appstudio/tssc-sample-pipelines/main/pac/tasks/git-clone.yaml"
