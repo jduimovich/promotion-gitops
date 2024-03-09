@@ -29,11 +29,8 @@ spec:
     image: quay.io/redhat-appstudio/appstudio-utils:d8a93bf5650424a4f20ee065578609792d70af1c
     script: |
       #!/bin/bash 
-      echo "------------------------------------"   
-      ls -al /workspace
-      ls -al /workspace/output 
-      ls -al /workspace/output/source
-
+      echo "------------------------------------"    
+      ls -al /workspace/output/source 
       cd /workspace/output/source
       ls -al 
 
@@ -72,17 +69,15 @@ spec:
         echo "TODO: configure git credentials to update gitops repository."
         exit 0
       fi
-      echo "------------------------------------"   
-      ls -al /workspace
-      ls -al /workspace/output 
+
+      echo "------------------------------------"    
       ls -al /workspace/output/source 
       cd /workspace/output/source
-      ls -al 
-      echo "------------------------------------"
-      cd /workspace/output/source
+      ls -al  
       echo $PARAM_GITOPS_REPO_URL
       echo $PARAM_ENV 
-      source promotion-env 
+      cat /workspace/output/source/promotion-env
+      source /workspace/output/source/promotion-env
       echo "COMPONENT_NAME=$COMPONENT_NAME"  
 
       if [ $PARAM_ENV == "promote-dev-stage" ]; then
