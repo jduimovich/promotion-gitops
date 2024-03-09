@@ -58,7 +58,7 @@ spec:
       echo "Commit Message:"
       echo "$COMMIT_MESSAGE"
       echo 
-      command=$(echo $COMMIT_MESSAGE | head)
+      command=$(echo $COMMIT_MESSAGE | head -n1)
       echo "Command:"
       echo "$command"
       echo 
