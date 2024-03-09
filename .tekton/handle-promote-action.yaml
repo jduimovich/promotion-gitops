@@ -91,6 +91,7 @@ spec:
         DST_PATCH="components/${COMPONENT_NAME}/overlays/$DST_OVERLAY/deployment-patch.yaml"
         pwd
         echo changes 
+        du -a
         cp $SRC_PATCH $DST_PATCH  
         git diff 
 
