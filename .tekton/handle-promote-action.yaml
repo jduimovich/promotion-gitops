@@ -33,7 +33,7 @@ spec:
       # be sure not to modify the source repo that was cloned  
       echo "COMPONENT_NAME=$COMPONENT_NAME" >/workspace/output/handle-promote-action.env
       
-      COMPONENT_NAME2=$(grep name: /workspace/output/source/application.yaml  | cut -d ':' -f2 | tr -d '[:space:]) 
+      COMPONENT_NAME2=$(grep  name: /workspace/output/source/application.yaml  | cut -d ':' -f2 | tr -d '[:space:]) 
 
       echo "COMPONENT_NAME2=$COMPONENT_NAME2" >>/workspace/output/handle-promote-action.env
       cat /workspace/output/handle-promote-action.env
