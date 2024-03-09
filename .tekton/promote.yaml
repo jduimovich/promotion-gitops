@@ -57,6 +57,7 @@ spec:
       echo $PARAM_GITOPS_REPO_URL
       echo $PARAM_ENV
 
+      ls -al
       ls /workspace
       
       # https://github.com/user-org/test-component-gitops => test-component
