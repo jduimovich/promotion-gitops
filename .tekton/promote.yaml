@@ -30,7 +30,13 @@ spec:
     script: |
       #!/bin/bash 
       echo "------------------------------------"
+      ls -al
+      ls -al /workspace
+      ls -al /workspace/output 
+
       cd /workspace/output 
+      ls -al 
+
       COMPONENT_NAME=$(yq .metadata.name application.yaml)
       echo $COMPONENT_NAME 
       echo "------------------------------------"  
