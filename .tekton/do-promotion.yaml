@@ -46,7 +46,6 @@ spec:
       taskRef:
         kind: Task
         name: promote
-  workspaces:
-    - name: workspace
-    - name: git-auth
-      optional: true 
+      workspaces:
+        - name: workspace
+          workspace: workspace  
