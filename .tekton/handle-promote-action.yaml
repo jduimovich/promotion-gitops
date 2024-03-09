@@ -69,31 +69,39 @@ spec:
         source /workspace/output/source/promotion-env 
         echo "Repo = $PARAM_GITOPS_REPO_URL"
         echo "COMPONENT_NAME=$COMPONENT_NAME"  
-        echo "ACTION=$ACTION"  
+        echo "ACTION=$ACTION" 
+        case $ACTION in 
+          "promote-dev-stage")
+            SRC_OVERLAY=development
+            DST_OVERLAY=stage
+            ;;
+            
+          "promote-stage-prod")
+            SRC_OVERLAY=development
+            DST_OVERLAY=stage
+            ;; 
 
-        if [ $ACTION == "promote-dev-stage" ]; then
-          echo "DEV TO STAGE"
-        fi 
-        if [ $ACTION == "promote-stage-prod" ]; then
-          echo "STAGE TO PROD"
-        fi 
+          *)
+            echo "Invalid promptions action $ACTION"
+            exit 0
+            ;;
+        esac 
+ 
+        SRC_PATCH="components/${COMPONENT_NAME}/overlays/$SRC_OVERLAY$SRC_OVERLAY/deployment-patch.yaml"
+        DST_PATCH="components/${COMPONENT_NAME}/overlays/$DST_OVERLAY/deployment-patch.yaml"
 
-        # https://github.com/user-org/test-component-gitops => test-component
-        gitops_repo_name=$(basename ${PARAM_GITOPS_REPO_URL}) 
-        component_id=$COMPONENT_NAME
-
-        # deployment_patch_filepath="components/${component_id}/overlays/development/deployment-patch.yaml"
+        echo "Source and Dest diff before promotion"
+        diff $SRC_PATCH  $DST_PATCH 
+        cp $SRC_PATCH $DST_PATCH 
+        echo "Source and Dest diff after promotion"
+        diff $SRC_PATCH  $DST_PATCH 
 
         # git config --global user.email "rhtap@noreplay.com"
-        # git config --global user.name "gitops-update"
-
+        # git config --global user.name "promotion-automation-handler" 
         # git clone ${PARAM_GITOPS_REPO_URL}
-        # cd ${gitops_repo_name}
-
-        # sed -i "s| image: .*| image: ${PARAM_IMAGE}|" $deployment_patch_filepath
-
+        # cd ${gitops_repo_name} 
         # git add .
-        # git commit -m "Update '${component_id}' component image to: ${PARAM_IMAGE}"
+        # git commit -m "Promoted '${SRC_OVERLAY}' to: ${DST_OVERLAY}"
         # git remote set-url origin $origin_with_auth
         # git push
       else 
