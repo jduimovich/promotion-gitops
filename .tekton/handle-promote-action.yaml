@@ -89,18 +89,17 @@ spec:
  
         SRC_PATCH="components/${COMPONENT_NAME}/overlays/$SRC_OVERLAY/deployment-patch.yaml"
         DST_PATCH="components/${COMPONENT_NAME}/overlays/$DST_OVERLAY/deployment-patch.yaml"
-        pwd
-        echo changes 
-        du -a
+        
+        echo "Promoted ${SRC_OVERLAY} to: ${DST_OVERLAY}"
         cp $SRC_PATCH $DST_PATCH  
-        git diff 
+        git diff -U0
 
         # git config --global user.email "rhtap@noreplay.com"
         # git config --global user.name "promotion-automation-handler" 
         # git clone ${PARAM_GITOPS_REPO_URL}
         # cd ${gitops_repo_name} 
         # git add .
-        # git commit -m "Promoted '${SRC_OVERLAY}' to: ${DST_OVERLAY}"
+        # git commit -m "Promoted ${SRC_OVERLAY} to: ${DST_OVERLAY}"
         # git remote set-url origin $origin_with_auth
         # git push
       else 
