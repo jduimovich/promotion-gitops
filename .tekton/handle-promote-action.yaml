@@ -69,50 +69,49 @@ spec:
       echo "COMPONENT_NAME:"
       echo "$COMPONENT_NAME"
       echo 
-      cd /workspace/output/source 
-      if test -f promotion-action ; then
-        ACTION=$(cat promotion-action) 
-        COMPONENT_NAME=$(grep name: /workspace/output/source/application.yaml | cut -d ':' -f2 | tr -d '[:space:]') 
-        echo "Repo = $PARAM_GITOPS_REPO_URL"
-        echo "COMPONENT_NAME=$COMPONENT_NAME"  
-        echo "ACTION=$ACTION" 
-        case $ACTION in 
-          "promote-dev-stage")
-            SRC_OVERLAY=development
-            DST_OVERLAY=stage
-            ;;
-            
-          "promote-stage-prod")
-            SRC_OVERLAY=development
-            DST_OVERLAY=stage
-            ;; 
+      cd /workspace/output/source  
+      ACTION=$command 
+      COMPONENT_NAME=$(grep name: /workspace/output/source/application.yaml | cut -d ':' -f2 | tr -d '[:space:]') 
+      echo "Repo = $PARAM_GITOPS_REPO_URL"
+      echo "COMPONENT_NAME=$COMPONENT_NAME"  
+      echo "ACTION=$ACTION" 
+      case $ACTION in 
+        "/promote development")
+          SRC_OVERLAY=development
+          DST_OVERLAY=stage
+          ;;
+        "/promote dev")
+          SRC_OVERLAY=development
+          DST_OVERLAY=stage
+          ;; 
+        "/promote prod")
+          SRC_OVERLAY=development
+          DST_OVERLAY=stage
+          ;;  
+        *)
+          echo "No action in commit message for promotion."
+          echo "Valid options are /promote dev | development, /promote prod."
+          exit 0
+          ;;
+      esac 
 
-          *)
-            echo "Invalid promptions action $ACTION"
-            exit 0
-            ;;
-        esac 
- 
-        SRC_PATCH="components/${COMPONENT_NAME}/overlays/$SRC_OVERLAY/deployment-patch.yaml"
-        DST_PATCH="components/${COMPONENT_NAME}/overlays/$DST_OVERLAY/deployment-patch.yaml"
-        
-        git config --global user.email "rhtap@noreplay.com"
-        git config --global user.name "promotion-automation-handler"  
-        #clean repo 
-        cd /workspace/output
-        gitops_repo_name=$(basename $PARAM_GITOPS_REPO_URL)
-        rm -rf ${gitops_repo_name}  
-        git clone ${PARAM_GITOPS_REPO_URL}
-        cd ${gitops_repo_name}  
-        echo "Promoted ${SRC_OVERLAY} to: ${DST_OVERLAY}"
-        cp $SRC_PATCH $DST_PATCH  
-        rm -rf promotion-action
-        git diff -U0
-        git status    
-        git add .
-        git commit -m "Promoted ${SRC_OVERLAY} to: ${DST_OVERLAY}"
-        git remote set-url origin $origin_with_auth
-        git push
-      else 
-        echo "No action for promotion found."
-      fi
+      SRC_PATCH="components/${COMPONENT_NAME}/overlays/$SRC_OVERLAY/deployment-patch.yaml"
+      DST_PATCH="components/${COMPONENT_NAME}/overlays/$DST_OVERLAY/deployment-patch.yaml"
+      
+      git config --global user.email "rhtap@noreplay.com"
+      git config --global user.name "promotion-automation-handler"  
+      #clean repo 
+      cd /workspace/output
+      gitops_repo_name=$(basename $PARAM_GITOPS_REPO_URL)
+      rm -rf ${gitops_repo_name}  
+      git clone ${PARAM_GITOPS_REPO_URL}
+      cd ${gitops_repo_name}  
+      echo "Promoted ${SRC_OVERLAY} to: ${DST_OVERLAY}"
+      cp $SRC_PATCH $DST_PATCH  
+      rm -rf promotion-action
+      git diff -U0
+      git status    
+      git add .
+      git commit -m "Promoted ${SRC_OVERLAY} to: ${DST_OVERLAY}"
+      git remote set-url origin $origin_with_auth
+      git push 
