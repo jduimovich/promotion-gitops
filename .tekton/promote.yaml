@@ -58,7 +58,7 @@ spec:
       echo $PARAM_ENV
 
       ls -al
-      ls /workspace
+      ls -al /workspace
       
       # https://github.com/user-org/test-component-gitops => test-component
       # gitops_repo_name=$(basename ${PARAM_GITOPS_REPO_URL})
@@ -77,3 +77,6 @@ spec:
       # git commit -m "Update '${component_id}' component image to: ${PARAM_IMAGE}"
       # git remote set-url origin $origin_with_auth
       # git push
+  workspaces:
+  - description: The git repo will be cloned onto the volume backing this Workspace.
+    name: output
