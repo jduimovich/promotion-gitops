@@ -40,8 +40,8 @@ spec:
       COMPONENT_NAME=$(yq .metadata.name application.yaml)
       echo $COMPONENT_NAME 
       echo "------------------------------------"  
-      echo "COMPONENT_NAME=$COMPONENT_NAME" >promotion-env
-      cat promotion-env
+      echo "COMPONENT_NAME=$COMPONENT_NAME" >/workspace/output/source/promotion-env
+      cat /workspace/output/source/promotion-env
   - name: promotion-step
     image: quay.io/redhat-appstudio/task-toolset@sha256:931a9f7886586391ccb38d33fd15a47eb03568f9b19512b0a57a56384fa52a3c
     volumeMounts:
@@ -72,12 +72,17 @@ spec:
         echo "TODO: configure git credentials to update gitops repository."
         exit 0
       fi
- 
+      echo "------------------------------------"   
+      ls -al /workspace
+      ls -al /workspace/output 
+      ls -al /workspace/output/source 
+      cd /workspace/output/source
+      ls -al 
       echo "------------------------------------"
       cd /workspace/output/source
       echo $PARAM_GITOPS_REPO_URL
       echo $PARAM_ENV 
-      source  promotion-env 
+      source promotion-env 
       echo "COMPONENT_NAME=$COMPONENT_NAME"  
 
       if [ $PARAM_ENV == "promote-dev-stage" ]; then
