@@ -63,7 +63,7 @@ spec:
         echo "TODO: configure git credentials to update gitops repository."
         exit 0
       fi 
-      echo "COMMIT MESSAGE"
+      echo "COMMIT MESSAGE $COMMIT_MESSAGE"
       cd /workspace/output/source 
       if test -f promotion-action ; then
         ACTION=$(cat promotion-action) 
