@@ -64,36 +64,38 @@ spec:
         exit 0
       fi 
       cd /workspace/output/source 
+      if test -f promotion-action ; then
+        ACTION=$(cat promotion-action) 
+        source /workspace/output/source/promotion-env 
+        echo "Repo = $PARAM_GITOPS_REPO_URL"
+        echo "COMPONENT_NAME=$COMPONENT_NAME"  
+        echo "ACTION=$ACTION"  
 
-      ACTION=$(cat /workspace/output/source/promotion-action) 
-      source /workspace/output/source/promotion-env
+        if [ $ACTION == "promote-dev-stage" ]; then
+          echo "DEV TO STAGE"
+        fi 
+        if [ $ACTION == "promote-stage-prod" ]; then
+          echo "STAGE TO PROD"
+        fi 
 
-      echo "Repo = $PARAM_GITOPS_REPO_URL"
-      echo "COMPONENT_NAME=$COMPONENT_NAME"  
-      echo "ACTION=$ACTION"  
+        # https://github.com/user-org/test-component-gitops => test-component
+        gitops_repo_name=$(basename ${PARAM_GITOPS_REPO_URL}) 
+        component_id=$COMPONENT_NAME
 
-      if [ $ACTION == "promote-dev-stage" ]; then
-        echo "DEV TO STAGE"
-      fi 
-      if [ $ACTION == "promote-stage-prod" ]; then
-        echo "STAGE TO PROD"
-      fi 
+        # deployment_patch_filepath="components/${component_id}/overlays/development/deployment-patch.yaml"
 
-      # https://github.com/user-org/test-component-gitops => test-component
-      gitops_repo_name=$(basename ${PARAM_GITOPS_REPO_URL}) 
-      component_id=$COMPONENT_NAME
+        # git config --global user.email "rhtap@noreplay.com"
+        # git config --global user.name "gitops-update"
 
-      # deployment_patch_filepath="components/${component_id}/overlays/development/deployment-patch.yaml"
+        # git clone ${PARAM_GITOPS_REPO_URL}
+        # cd ${gitops_repo_name}
 
-      # git config --global user.email "rhtap@noreplay.com"
-      # git config --global user.name "gitops-update"
+        # sed -i "s| image: .*| image: ${PARAM_IMAGE}|" $deployment_patch_filepath
 
-      # git clone ${PARAM_GITOPS_REPO_URL}
-      # cd ${gitops_repo_name}
-
-      # sed -i "s| image: .*| image: ${PARAM_IMAGE}|" $deployment_patch_filepath
-
-      # git add .
-      # git commit -m "Update '${component_id}' component image to: ${PARAM_IMAGE}"
-      # git remote set-url origin $origin_with_auth
-      # git push
+        # git add .
+        # git commit -m "Update '${component_id}' component image to: ${PARAM_IMAGE}"
+        # git remote set-url origin $origin_with_auth
+        # git push
+      else 
+        echo "No action for promotion found."
+      fi
