@@ -32,6 +32,10 @@ spec:
       COMPONENT_NAME=$(yq .metadata.name /workspace/output/source/application.yaml) 
       # be sure not to modify the source repo that was cloned  
       echo "COMPONENT_NAME=$COMPONENT_NAME" >/workspace/output/handle-promote-action.env
+      
+      COMPONENT_NAME2=$(grep name: /workspace/output/source/application.yaml  | cut -d ':' -f2) 
+
+      echo "COMPONENT_NAME2=$COMPONENT_NAME2" >>/workspace/output/handle-promote-action.env
       cat /workspace/output/handle-promote-action.env
   - name: promotion-step
     image: quay.io/redhat-appstudio/task-toolset@sha256:931a9f7886586391ccb38d33fd15a47eb03568f9b19512b0a57a56384fa52a3c
@@ -65,13 +69,11 @@ spec:
       fi 
       echo "Commit Message:"
       echo "$COMMIT_MESSAGE"
-      echo
-
+      echo 
       command=$(echo $COMMIT_MESSAGE | head)
       echo "Command:"
       echo "$command"
-      echo
-
+      echo 
       cd /workspace/output/source 
       if test -f promotion-action ; then
         ACTION=$(cat promotion-action) 
