@@ -47,5 +47,5 @@ spec:
         kind: Task
         name: promote
       workspaces:
-        - name: workspace
+        - name: output
           workspace: workspace  
