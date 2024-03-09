@@ -14,8 +14,8 @@ spec:
     value: '{{repo_url}}'   
   - name: revision
     value: '{{revision}}'  
-  - name: event-type
-    value: '{{event_type}}'   
+  - name: commit-message
+    value: '{{body.head_commit.message}}'   
   pipelineRef:
     name: do-promotion 
   workspaces:

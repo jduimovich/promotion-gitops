@@ -15,8 +15,8 @@ spec:
       description: Revision of the Source Repository
       name: revision
       type: string 
-    - description: If push update the deployment, if PR, only run checks.
-      name: event-type
+    - description: Commit Message.
+      name: commit-message
       type: string 
   tasks:
     - name: clone-repository
@@ -36,6 +36,8 @@ spec:
       params:
         - name: gitops-repo-url
           value: $(params.git-url)  
+        - name: commit-message
+          value: $(params.commit-message)  
       runAfter:
         - clone-repository
       taskRef:

@@ -8,6 +8,9 @@ spec:
     - name: gitops-repo-url
       type: string
       description: URL of gitops repository to update with the newly built image.
+    - name: commit-message
+      type: string
+      description: Pass "/promote development" or "/promote stage"
     - name: gitops-auth-secret-name
       type: string
       default: gitops-auth-secret
@@ -38,6 +41,8 @@ spec:
     env:
       - name: PARAM_GITOPS_REPO_URL
         value: $(params.gitops-repo-url) 
+      - name: COMMIT_MESSAGE
+        value: $(params.commit-message)  
     script: |
       if test -f /gitops-auth-secret/password ; then
         gitops_repo_url=${PARAM_GITOPS_REPO_URL}
@@ -58,6 +63,7 @@ spec:
         echo "TODO: configure git credentials to update gitops repository."
         exit 0
       fi 
+      echo "COMMIT MESSAGE"
       cd /workspace/output/source 
       if test -f promotion-action ; then
         ACTION=$(cat promotion-action) 
