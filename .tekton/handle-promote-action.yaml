@@ -8,6 +8,8 @@ spec:
     - name: gitops-repo-url
       type: string
       description: URL of gitops repository to update with the newly built image.
+    - name: revision
+      value: $(params.revision) 
     - name: commit-message
       type: string
       description: Pass "/promote development" or "/promote stage"
@@ -132,6 +134,7 @@ spec:
       rm -rf ${gitops_repo_name}  
       git clone ${PARAM_GITOPS_REPO_URL}
       cd ${gitops_repo_name}  
+      git checkout $(params.revision)
       # Promotion is a copy of the overlay patch
       # includes image as well, as replicas and other env specific config
       cp $SRC_PATCH $DST_PATCH

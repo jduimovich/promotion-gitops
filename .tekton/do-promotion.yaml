@@ -35,7 +35,9 @@ spec:
     - name: handle-promote-action
       params:
         - name: gitops-repo-url
-          value: $(params.git-url)  
+          value: $(params.git-url)
+        - name: revision
+          value: $(params.revision)   
         - name: commit-message
           value: $(params.commit-message)  
       runAfter:
