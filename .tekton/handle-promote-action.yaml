@@ -124,13 +124,18 @@ spec:
       DST_PATCH="components/${COMPONENT_NAME}/overlays/$DST_OVERLAY/deployment-patch.yaml"
       
       git config --global user.email "rhtap@noreplay.com"
-      git config --global user.name "promotion-automation-handler"  
-      #clean repo 
-      cd /workspace/output
-      gitops_repo_name=$(basename $PARAM_GITOPS_REPO_URL)
-      rm -rf ${gitops_repo_name}  
-      git clone ${PARAM_GITOPS_REPO_URL}
-      cd ${gitops_repo_name}  
+      git config --global user.name "promotion-automation-handler" 
+
+      # Clone a fresh repo 
+      # cd /workspace/output
+      # gitops_repo_name=$(basename $PARAM_GITOPS_REPO_URL)
+      # rm -rf ${gitops_repo_name}  
+      # git clone ${PARAM_GITOPS_REPO_URL}
+      # cd ${gitops_repo_name}  
+
+      # Use the existing cloned repo from clone task
+      cd /workspace/output/source
+
       cp $SRC_PATCH $DST_PATCH
       if [[ -z $(git status -s) ]]; then 
         echo "No changes found in $COMPONENT_NAME between ${SRC_OVERLAY} and ${DST_OVERLAY}" 
