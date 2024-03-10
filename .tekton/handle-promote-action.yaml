@@ -133,7 +133,7 @@ spec:
       cd ${gitops_repo_name}  
       cp $SRC_PATCH $DST_PATCH
       if [[ -z $(git status -s) ]]; then 
-        echo "Changes being promoted in $COMPONENT_NAME from ${SRC_OVERLAY} to ${DST_OVERLAY}" 
+        echo "No changes found in $COMPONENT_NAME between ${SRC_OVERLAY} and ${DST_OVERLAY}" 
         echo "Exiting..."  
         exit 0
       else 
