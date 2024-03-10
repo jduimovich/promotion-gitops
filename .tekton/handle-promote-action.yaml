@@ -25,10 +25,11 @@ spec:
         secretName: $(params.gitops-auth-secret-name)
         optional: true
   steps:
-  - name: get-image-baselines  
+  - name: get-images-per-env  
     image: quay.io/redhat-appstudio/appstudio-utils:d8a93bf5650424a4f20ee065578609792d70af1c
     script: |
       #!/bin/bash
+      #separate image to access yq command 
       cd /workspace/output/source
       COMPONENT_NAME=$(yq .metadata.name application.yaml)
       IMG_PATH=".spec.template.spec.containers[0].image"
@@ -36,13 +37,14 @@ spec:
       STAGE_IMAGE=$(yq "$IMG_PATH" components/${COMPONENT_NAME}/overlays/stage/deployment-patch.yaml)
       PROD_IMAGE=$(yq "$IMG_PATH" components/${COMPONENT_NAME}/overlays/prod/deployment-patch.yaml)
 
-      rm -rf /workspace/output/handle-promote-action.env
-      touch /workspace/output/handle-promote-action.env
-      echo "COMPONENT_NAME=$COMPONENT_NAME" >>/workspace/output/handle-promote-action.env
-      echo "DEV_IMAGE=$DEV_IMAGE" >>/workspace/output/handle-promote-action.env
-      echo "STAGE_IMAGE=$STAGE_IMAGE" >>/workspace/output/handle-promote-action.env
-      echo "PROD_IMAGE=$PROD_IMAGE" >>/workspace/output/handle-promote-action.env
-      cat /workspace/output/handle-promote-action.env
+      COMPONENT_IMAGE_ENV=/workspace/output/component-images.env
+      rm -rf $COMPONENT_IMAGE_ENV
+      touch $COMPONENT_IMAGE_ENV
+      echo "COMPONENT_NAME=$COMPONENT_NAME" >>$COMPONENT_IMAGE_ENV
+      echo "DEV_IMAGE=$DEV_IMAGE" >>$COMPONENT_IMAGE_ENV
+      echo "STAGE_IMAGE=$STAGE_IMAGE" >>$COMPONENT_IMAGE_ENV
+      echo "PROD_IMAGE=$PROD_IMAGE" >>$COMPONENT_IMAGE_ENV
+      cat >>$COMPONENT_IMAGE_ENV
   - name: promotion-step
     image: quay.io/redhat-appstudio/task-toolset@sha256:931a9f7886586391ccb38d33fd15a47eb03568f9b19512b0a57a56384fa52a3c
     volumeMounts:
@@ -72,7 +74,14 @@ spec:
         echo "You can update gitops repository with the new image: ${PARAM_IMAGE} manually"
         echo "TODO: configure git credentials to update gitops repository."
         exit 0
-      fi 
+      fi
+      source /workspace/output/component-images.env
+      echo "COMPONENT_NAME=$COMPONENT_NAME" 
+      echo "DEV_IMAGE:   $DEV_IMAGE" 
+      echo "STAGE_IMAGE: $STAGE_IMAGE" 
+      echo "PROD_IMAGE:  $PROD_IMAGE" 
+      echo "-------------------------------"
+
       echo "Commit Message:"
       echo "$COMMIT_MESSAGE"
       echo "-------"
@@ -121,11 +130,14 @@ spec:
       rm -rf ${gitops_repo_name}  
       git clone ${PARAM_GITOPS_REPO_URL}
       cd ${gitops_repo_name}  
-      echo "Promoted ${SRC_OVERLAY} to: ${DST_OVERLAY}"
-      cp $SRC_PATCH $DST_PATCH  
-      rm -rf promotion-action
-      git diff -U0
-      git status    
+      cp $SRC_PATCH $DST_PATCH
+      if [[ -z $(git status -s) ]]; then
+        echo 'No changes has been detected'
+        exit 0
+      else 
+        echo "Changes promoted from ${SRC_OVERLAY} to: ${DST_OVERLAY}" 
+        git diff -U0 
+      fi 
       git add .
       git commit -m "Promoted ${SRC_OVERLAY} to: ${DST_OVERLAY}"
       git remote set-url origin $origin_with_auth
