@@ -141,7 +141,7 @@ spec:
       rm -rf ${gitops_repo_name}  
       git clone ${PARAM_GITOPS_REPO_URL}
       cd ${gitops_repo_name}   
-      echo $(params.target-branch)  
+      git checkout $(params.target-branch)  
       # Promotion is a copy of the overlay patch
       # includes image as well, as replicas and other env specific config
       cp $SRC_PATCH $DST_PATCH
@@ -156,4 +156,4 @@ spec:
       git add .
       git commit -m "Promoted ${SRC_OVERLAY} to ${DST_OVERLAY}"
       git remote set-url origin $origin_with_auth
-      git push
+      git push origin $(params.target-branch) 
