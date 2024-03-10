@@ -57,10 +57,7 @@ spec:
       fi 
       echo "Commit Message:"
       echo "$COMMIT_MESSAGE"
-      echo 
-      echo "Commit Message:"
-      echo "$COMMIT_MESSAGE" | od -x
-      echo 
+      echo "-------"
       command=$(echo $COMMIT_MESSAGE | head -n1)
       echo "Command:"
       echo "$command"
