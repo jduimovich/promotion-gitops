@@ -1,11 +1,11 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: promo-test-on-pull-request
+  name: promo-test-on-pull-request-promotion
   annotations:
     pipelinesascode.tekton.dev/on-event: "[pull_request]"
     pipelinesascode.tekton.dev/on-target-branch: "[main]" 
-    pipelinesascode.tekton.dev/pipeline: ".tekton/do-promotion.yaml"
+    pipelinesascode.tekton.dev/pipeline: ".tekton/promotion-flow-pipeline.yaml"
     pipelinesascode.tekton.dev/task-0: ".tekton/handle-promote-action.yaml" 
     pipelinesascode.tekton.dev/task-1: "https://raw.githubusercontent.com/redhat-appstudio/tssc-sample-pipelines/main/pac/tasks/git-clone.yaml"
 spec:
@@ -19,7 +19,7 @@ spec:
   - name: commit-message 
     value: '{{body.pull_request.body}}'
   pipelineRef:
-    name: do-promotion 
+    name: promotion-flow-pipeline 
   workspaces:
     - name: git-auth
       secret:
