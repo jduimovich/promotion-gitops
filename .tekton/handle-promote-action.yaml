@@ -87,7 +87,7 @@ spec:
       echo "$COMMIT_MESSAGE"
       echo "-------"
       command=$(echo $COMMIT_MESSAGE | head -n1)
-      echo "Command Extracted from commit message:"
+      echo "Command extracted from commit message body:"
       echo "$command"
       echo "-------" 
 
@@ -111,8 +111,9 @@ spec:
           DST_OVERLAY=stage
           ;;  
         *)
-          echo "No action in commit message for promotion."
-          echo "Valid options are /promote dev | development, /promote prod."
+          echo "No promotion command found commit or pull-request message body."
+          echo "Command must be in first line message body."
+          echo "Valid options are '/promote dev | development', '/promote prod'."
           exit 0
           ;;
       esac 
