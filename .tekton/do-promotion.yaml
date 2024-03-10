@@ -15,7 +15,7 @@ spec:
       description: Revision of the Source Repository
       name: revision
       type: string 
-    - description: Commit Message.
+    - description: Contents of commit message (push) or pull-request body for PRs
       name: commit-message
       type: string 
   tasks:
