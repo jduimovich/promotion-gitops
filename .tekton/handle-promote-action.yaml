@@ -105,9 +105,9 @@ spec:
           DST_OVERLAY=stage
           ;;  
         *)
-          echo "No promotion command found commit or pull-request message body."
+          echo "No promotion command found in commit or pull-request message body."
           echo "Command must be in first line message body."
-          echo "Valid options are '/promote dev | development', '/promote prod'."
+          echo "Valid options are /promote <dev | development | prod>."
           exit 0
           ;;
       esac 
