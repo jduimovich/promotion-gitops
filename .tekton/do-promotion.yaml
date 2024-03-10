@@ -37,7 +37,9 @@ spec:
         - name: gitops-repo-url
           value: $(params.git-url)
         - name: revision
-          value: $(params.revision)   
+          value: $(params.revision)  
+        - name: target-branch
+          value: $(params.target-branch)   
         - name: commit-message
           value: $(params.commit-message)  
       runAfter:

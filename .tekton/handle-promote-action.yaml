@@ -10,6 +10,8 @@ spec:
       description: URL of gitops repository to update with the newly built image.
     - name: revision
       value: $(params.revision) 
+    - name: target-branch
+      value: $(params.target-branch) 
     - name: commit-message
       type: string
       description: Pass "/promote development" or "/promote stage"
@@ -133,8 +135,7 @@ spec:
       gitops_repo_name=$(basename $PARAM_GITOPS_REPO_URL)
       rm -rf ${gitops_repo_name}  
       git clone ${PARAM_GITOPS_REPO_URL}
-      cd ${gitops_repo_name}  
-      git checkout $(params.revision)
+      cd ${gitops_repo_name}   
       # Promotion is a copy of the overlay patch
       # includes image as well, as replicas and other env specific config
       cp $SRC_PATCH $DST_PATCH

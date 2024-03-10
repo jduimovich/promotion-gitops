@@ -13,7 +13,9 @@ spec:
   - name: git-url
     value: '{{repo_url}}'   
   - name: revision
-    value: '{{revision}}'  
+    value: '{{revision}}'   
+  - name: target-branch
+    value: '{{target_branch}}'    
   - name: commit-message
     value: '{{body.head_commit.message}}'   
   pipelineRef:
