@@ -25,7 +25,7 @@ spec:
         secretName: $(params.gitops-auth-secret-name)
         optional: true
   steps:
-  - name: Determine Image Baselines  
+  - name: get-image-baselines  
     image: quay.io/redhat-appstudio/appstudio-utils:d8a93bf5650424a4f20ee065578609792d70af1c
     script: |
       #!/bin/bash
