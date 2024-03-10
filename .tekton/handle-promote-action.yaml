@@ -148,4 +148,4 @@ spec:
       git add .
       git commit -m "Promoted ${SRC_OVERLAY} to ${DST_OVERLAY}"
       git remote set-url origin $origin_with_auth
-      git push 
+      git push HEAD:main
