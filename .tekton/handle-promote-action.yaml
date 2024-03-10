@@ -117,8 +117,8 @@ spec:
       echo "Repository:  $PARAM_GITOPS_REPO_URL"
       echo "Component: $COMPONENT_NAME"  
       echo "Command: $command" 
-      echo "Promotion from: $SRC_PATCH" 
-      echo "Promotion to: $DST_PATCH" 
+      echo "Promotion from: $SRC_OVERLAY" 
+      echo "Promotion to: $DST_OVERLAY" 
 
       SRC_PATCH="components/${COMPONENT_NAME}/overlays/$SRC_OVERLAY/deployment-patch.yaml"
       DST_PATCH="components/${COMPONENT_NAME}/overlays/$DST_OVERLAY/deployment-patch.yaml"
