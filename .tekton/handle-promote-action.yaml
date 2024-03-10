@@ -25,6 +25,24 @@ spec:
         secretName: $(params.gitops-auth-secret-name)
         optional: true
   steps:
+  - name: Determine Image Baselines  
+    image: quay.io/redhat-appstudio/appstudio-utils:d8a93bf5650424a4f20ee065578609792d70af1c
+    script: |
+      #!/bin/bash
+      cd /workspace/output/source
+      COMPONENT_NAME=$(yq .metadata.name application.yaml)
+      IMG_PATH=".spec.template.spec.containers[0].image"
+      DEV_IMAGE=$(yq "$IMG_PATH" components/${COMPONENT_NAME}/overlays/development/deployment-patch.yaml)
+      STAGE_IMAGE=$(yq "$IMG_PATH" components/${COMPONENT_NAME}/overlays/stage/deployment-patch.yaml)
+      PROD_IMAGE=$(yq "$IMG_PATH" components/${COMPONENT_NAME}/overlays/prod/deployment-patch.yaml)
+
+      rm -rf /workspace/output/handle-promote-action.env
+      touch /workspace/output/handle-promote-action.env
+      echo "COMPONENT_NAME=$COMPONENT_NAME" >>/workspace/output/handle-promote-action.env
+      echo "DEV_IMAGE=$DEV_IMAGE" >>/workspace/output/handle-promote-action.env
+      echo "STAGE_IMAGE=$STAGE_IMAGE" >>/workspace/output/handle-promote-action.env
+      echo "PROD_IMAGE=$PROD_IMAGE" >>/workspace/output/handle-promote-action.env
+      cat /workspace/output/handle-promote-action.env
   - name: promotion-step
     image: quay.io/redhat-appstudio/task-toolset@sha256:931a9f7886586391ccb38d33fd15a47eb03568f9b19512b0a57a56384fa52a3c
     volumeMounts:
