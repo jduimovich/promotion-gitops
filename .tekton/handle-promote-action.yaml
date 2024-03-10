@@ -94,6 +94,11 @@ spec:
       echo "Command extracted from commit message body:"
       echo "$command"
       echo "-------" 
+      
+      
+      echo "Target branch $(params.target-branch)" 
+      echo "-------" 
+       
 
       case $command in 
         "/promote development")
