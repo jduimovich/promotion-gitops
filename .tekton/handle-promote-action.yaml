@@ -91,13 +91,7 @@ spec:
       echo "$command"
       echo "-------" 
 
-      cd /workspace/output/source  
-      ACTION=$command 
-      COMPONENT_NAME=$(grep name: /workspace/output/source/application.yaml | cut -d ':' -f2 | tr -d '[:space:]') 
-      echo "Repo = $PARAM_GITOPS_REPO_URL"
-      echo "COMPONENT_NAME=$COMPONENT_NAME"  
-      echo "ACTION=$ACTION" 
-      case $ACTION in 
+      case $command in 
         "/promote development")
           SRC_OVERLAY=development
           DST_OVERLAY=stage
@@ -118,6 +112,14 @@ spec:
           ;;
       esac 
 
+      # command is valid, perform copy
+      cd /workspace/output/source   
+      echo "Repository:  $PARAM_GITOPS_REPO_URL"
+      echo "Component: $COMPONENT_NAME"  
+      echo "Command: $command" 
+      echo "Promotion from: $SRC_PATCH" 
+      echo "Promotion to: $DST_PATCH" 
+
       SRC_PATCH="components/${COMPONENT_NAME}/overlays/$SRC_OVERLAY/deployment-patch.yaml"
       DST_PATCH="components/${COMPONENT_NAME}/overlays/$DST_OVERLAY/deployment-patch.yaml"
       
@@ -131,14 +133,14 @@ spec:
       cd ${gitops_repo_name}  
       cp $SRC_PATCH $DST_PATCH
       if [[ -z $(git status -s) ]]; then 
-        echo "No changes to promote from ${SRC_OVERLAY} to: ${DST_OVERLAY}"  
+        echo "Changes being promoted in $COMPONENT_NAME from ${SRC_OVERLAY} to ${DST_OVERLAY}" 
         echo "Exiting..."  
         exit 0
       else 
-        echo "Changes being promoted from ${SRC_OVERLAY} to: ${DST_OVERLAY}" 
+        echo "Changes being promoted in $COMPONENT_NAME from ${SRC_OVERLAY} to ${DST_OVERLAY}" 
         git diff -U0 
       fi 
       git add .
-      git commit -m "Promoted ${SRC_OVERLAY} to: ${DST_OVERLAY}"
+      git commit -m "Promoted ${SRC_OVERLAY} to ${DST_OVERLAY}"
       git remote set-url origin $origin_with_auth
       git push 
