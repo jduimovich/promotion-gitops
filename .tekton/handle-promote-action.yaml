@@ -76,6 +76,7 @@ spec:
         exit 0
       fi
       source /workspace/output/component-images.env
+      echo 
       echo "COMPONENT_NAME=$COMPONENT_NAME" 
       echo "DEV_IMAGE:   $DEV_IMAGE" 
       echo "STAGE_IMAGE: $STAGE_IMAGE" 
@@ -86,13 +87,10 @@ spec:
       echo "$COMMIT_MESSAGE"
       echo "-------"
       command=$(echo $COMMIT_MESSAGE | head -n1)
-      echo "Command:"
+      echo "Command Extracted from commit message:"
       echo "$command"
-      echo 
-      COMPONENT_NAME=$(grep name: /workspace/output/source/application.yaml | cut -d ':' -f2 | tr -d '[:space:]') 
-      echo "COMPONENT_NAME:"
-      echo "$COMPONENT_NAME"
-      echo 
+      echo "-------" 
+      
       cd /workspace/output/source  
       ACTION=$command 
       COMPONENT_NAME=$(grep name: /workspace/output/source/application.yaml | cut -d ':' -f2 | tr -d '[:space:]') 
