@@ -100,14 +100,14 @@ spec:
           SRC_OVERLAY=development
           DST_OVERLAY=stage
           ;; 
-        "/promote prod")
-          SRC_OVERLAY=development
-          DST_OVERLAY=stage
+        "/promote stage")
+          SRC_OVERLAY=stage
+          DST_OVERLAY=prod
           ;;  
         *)
           echo "No promotion command found in commit or pull-request message body."
           echo "Command must be in first line message body."
-          echo "Valid options are /promote <dev | development | prod>."
+          echo "Valid commands: are /promote <dev | development | stage>." 
           exit 0
           ;;
       esac 
