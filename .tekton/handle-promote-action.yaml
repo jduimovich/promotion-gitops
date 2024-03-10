@@ -90,7 +90,7 @@ spec:
       echo "Command Extracted from commit message:"
       echo "$command"
       echo "-------" 
-      
+
       cd /workspace/output/source  
       ACTION=$command 
       COMPONENT_NAME=$(grep name: /workspace/output/source/application.yaml | cut -d ':' -f2 | tr -d '[:space:]') 
@@ -129,11 +129,12 @@ spec:
       git clone ${PARAM_GITOPS_REPO_URL}
       cd ${gitops_repo_name}  
       cp $SRC_PATCH $DST_PATCH
-      if [[ -z $(git status -s) ]]; then
-        echo 'No changes has been detected'
+      if [[ -z $(git status -s) ]]; then 
+        echo "No changes to promote from ${SRC_OVERLAY} to: ${DST_OVERLAY}"  
+        echo "Exiting..."  
         exit 0
       else 
-        echo "Changes promoted from ${SRC_OVERLAY} to: ${DST_OVERLAY}" 
+        echo "Changes being promoted from ${SRC_OVERLAY} to: ${DST_OVERLAY}" 
         git diff -U0 
       fi 
       git add .
